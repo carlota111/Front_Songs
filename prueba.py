@@ -1,24 +1,12 @@
+from Classes.DataLoader import DataJSONLoader, DataLoader, DataAPILoader
 import streamlit as st
-import pandas as pd
-import json
-import matplotlib.pyplot as plt
+import pandas as pd 
 
-# Título de la app
-st.title("Procesar y Visualizar Datos en Streamlit")
 
-# Datos en formato JSON (tu ejemplo)
-json_data = pd.read_json("/home/cgarcipo/Front_Songs/Data/short_cleaned_songs.json")
-# Convertir los datos JSON a un DataFrame
-data_dict = json.loads(json_data)
-st.title(type(json_data))
-data = pd.DataFrame([data_dict])
+data_loader = DataLoader(DataJSONLoader("Data/short_cleaned_songs.json"))
+datos=data_loader.load()
 
-# Mostrar los datos cargados
-st.write("Datos cargados:")
-st.write(data)
+df = pd.DataFrame(datos['datos_limpios'])
 
-# Visualizar un gráfico de ejemplo
-st.write("Gráfico de popularidad y valencia:")
-fig, ax = plt.subplots()
-data.plot(x="track_name", y=["track_popularity", "valence"], kind="bar", ax=ax)
-st.pyplot(fig)
+st.write("Tabla de datos:")
+st.dataframe(df, use_container_width=True) 
